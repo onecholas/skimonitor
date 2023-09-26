@@ -18,6 +18,7 @@ Please let me know if there's any functionality that would be fun to add!
 - Adafruit BMP390 Altimeter
 - NEO6M GPS module
 - WS2812B LED Strips
+- 2x 5V @ 1A Boost Converter
 
 ## Roadmap
 
