@@ -1,0 +1,166 @@
+    <!DOCTYPE html> <html>
+        <head>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" charset="UTF-8">
+                <!-- <meta http-equiv="refresh" content="3"> -->
+            <title>SkiMonitor Dashboard</title>
+            <link rel="stylesheet" type="text/css" href="style.css">
+            <script src="highcharts.js"></script>
+        </head>
+        <body onload="check_ON(); timer_button(); load_speed('curr_speed_unit'); load_speed('curr_top_speed_unit'); load_distance('curr_dist_unit'); load_distance('curr_elev_unit'); load_temperature('curr_temp_unit'); load_speed('top_speed_unit'); load_distance('overall_dist_unit'); load_distance('overall_elev_unit')">
+        <h1>SkiMonitor v4.5</h1>
+        <h3>Developed by onecholas using HTML, CSS, and JS for ESP32 implementation</h3>
+        <br><br>
+        <div class="main-container">
+            <br>
+            <h3><a>LED Status: <b><span id="LED Status">OFF</span></b></a></h3>
+            <label class="toggle">
+                <input id="onoff" name="onoff" type="checkbox" onclick="check_ON();color_mode()" onchange="ski_mode(this)" %LED_ONOFF% >
+                <span class="switch"></span>
+            </label>
+            <br><br><br>
+            <h3 id="buttonLabel">Preset Options</h3>
+            <label class="radio-button">
+                <input type="radio" name="option" id="option0" value="option0" onclick="color_mode()" onchange="ski_mode(this)" %MODE0% >
+                <span>Rainbow Fade</span>
+            </label>
+            <label class="radio-button">
+                <input type="radio" name="option" id="option1" value="option1" onclick="color_mode()" onchange="ski_mode(this)" %MODE1% >
+                <span>Teal/Purple Fade</span>
+            </label>
+            <br><br><br>
+            <h3 id="buttonLabel" style="margin-top:20px">Speed Options</h3>
+            <label class="radio-button">
+                <input type="radio" name="option" id="option2" value="option2" onclick="color_mode()" onchange="ski_mode(this)" %MODE2% >
+                <span>Speed Fade</span>
+            </label>
+            <label class="radio-button">
+                <input type="radio" name="option" id="option3" value="option3" onclick="color_mode()" onchange="ski_mode(this)" %MODE3% >
+                <span>Speed Bounce</span>
+            </label>
+            <label class="radio-button">
+                <input type="radio" name="option" id="option4" value="option4" onclick="color_mode()" onchange="ski_mode(this)" %MODE4% >
+                <span>Speed Meteor</span>
+            </label>
+            <br><br><br>
+            <h3 id="buttonLabel" style="margin-top:20px">Custom Options</h3>
+            <label class="radio-button">
+                <input type="radio" name="option" id="option5" value="option5" onclick="color_mode()" onchange="ski_mode(this)" %MODE5% >
+                <span>Fade</span>
+            </label>
+            <label class="radio-button">
+                <input type="radio" name="option" id="option6" value="option6" onclick="color_mode()" onchange="ski_mode(this)" %MODE6% >
+                <span>Bounce</span>
+            </label>
+            <label class="radio-button">
+                <input type="radio" name="option" id="option7" value="option7" onclick="color_mode()" onchange="ski_mode(this)" %MODE7% > 
+                <span>Meteor</span>
+            </label>
+            <label class="radio-button">
+                <input type="radio" name="option" id="option8" value="option8" onclick="color_mode()" onchange="ski_mode(this)" %MODE8% >
+                <span>Solid</s  pan>
+            </label>
+            <br>
+            <label class="button"> 
+                <input type="color" id="colorpicker" onclick="get_color()"  disabled/>
+                <span>Select Color</span>
+            </label>
+        </div>
+        <div class="main-container">
+            <br>
+            <h3><a>Current Run Statistics</a></h3>
+            <label class="timer"> 
+                <input type="checkbox" id="timer" value="timer" onclick="timer_button()" onchange="ski_mode(this)" %TIMER_ONOFF% >
+                <div id="curr_time_value" class="timing" data-curr-time="%CURR_TIME%">N/A</div>
+                <div class="timing-control" id="timer-control">Start Run</div>
+            </label>
+
+            <br><br>
+            <h5><a>Battery Status: <b><span id="battery_status" data-battery-status="%BATTERY_STATUS%">N/A</span></b></a></h3>
+            <h5><a>GPS Status: <b><span id="gps_status" data-gps-status="%GPS_STATUS%">N/A</span></b></a></h3>
+
+            <div onclick="toggle_speed('curr_speed_unit')" class="box-speedometer">
+                <div class="speed-container">
+                    <div class="speed-overflow">
+                        <div class="bar" id="curr_speed_bar"></div>
+                    </div>
+                    <div class="speed-needle" id="speed_needle"></div>
+                    <h4><a id="curr_speed_value" data-curr-speed="%CURR_SPEED%">N/A</a><b><span id='curr_speed_unit'>mph<span></b></h4>
+                    <hr class="solid" style="width: 16em; ">
+                    <h4><p>Current Speed</p></h4>
+                </div>
+            </div>
+            <div class="box-container">
+                <div onclick="toggle_speed('curr_top_speed_unit')" class="box">
+                    <h4><a id="curr_top_speed_value" data-curr-top-speed="%CURR_TOP_SPEED%">N/A</a><b><span id='curr_top_speed_unit'>mph</span></b></h4>
+                    <hr class="solid">
+                    <h4><p>Top Speed This Run</p></h4>
+                </div>
+                <div onclick="toggle_distance('curr_dist_unit')" class="box">
+                    <h4><a id="curr_dist_value" data-curr-dist="%CURR_DIST%">N/A</a><b><span id='curr_dist_unit'>m</span></b></h4>
+                    <hr class="solid">
+                    <h4><p>Distance This Run</p></h4>
+                </div>
+                <div onclick="toggle_distance('curr_elev_unit')" class="box">
+                    <h4><a id="curr_elev_value" data-curr-elev="%CURR_ELEV%">N/A</a><b><span id='curr_elev_unit'>m</span></b></h4>
+                    <hr class="solid">
+                    <h4><p>Elevation This Run</p></h4>
+                </div>
+                <div onclick="toggle_temperature('curr_temp_unit')" class="box">
+                    <h4><a id="curr_temp_value" data-curr-temp="%CURR_TEMP%">N/A</a><b><span id='curr_temp_unit'>°F</span></b></h4>
+                    <hr class="solid">
+                    <h4><p>Operating Temperature</p></h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-container">
+            <br>
+            <h3><a>Overall Statistics</a></h3>
+            <div class="box-graph" style="margin-bottom: 2em;">
+                <div class="container">
+                    <div id="top_speed_chart"></div>
+                </div>
+            </div>
+            <div class="box-container" style="margin-top: -2em;">
+                <div onclick="toggle_speed('top_speed_unit')" class="box">
+                    <h4><a id="overall_top_speed_value" data-overall-top-speed="%OVERALL_TOP_SPEED%">N/A</a><b><span id="top_speed_unit">mph</span></b></h4>
+                    <hr class="solid">
+                    <h4><p>Overall Top Speed</p></h4>
+                </div>
+                <div onclick="toggle_distance('overall_dist_unit')" class="box">
+                    <h4><a id="overall_dist_value" data-overall-dist="%OVERALL_DIST%">N/A</a><b><span id='overall_dist_unit'>m</span></b></h4>
+                    <hr class="solid">
+                    <h4><p>Overall Total Run Distance</p></h4>
+                </div>
+                <div onclick="toggle_distance('overall_elev_unit')" class="box">
+                    <h4><a id="overall_elev_value" data-overall-elev="%OVERALL_ELEV%">N/A</a><b><span id='overall_elev_unit'>m</span></b></h4>
+                    <hr class="solid">
+                    <h4><p>Overall Total Elevation</p></h4>
+                </div>
+                <div class="box" style="cursor:default">
+                    <h4><a id="runs_completed" data-runs-completed="%RUNS_COMPLETED%">N/A</a><b>runs</b></h4>
+                    <hr class="solid">
+                    <h4><p>Runs Completed</p></h4>
+                </div>
+                <div class="box" style="cursor:default">
+                    <h4><a id="avg_run_time" data-avg-run-time="%AVG_RUN_TIME%">N/A</a><b>m:s</b></h4>
+                    <hr class="solid">
+                    <h4><p>Average Run Time</p></h4>
+                </div>
+                <div class="box" style="cursor:default"> 
+                    <h4><a id="total_run_time" data-total-run-time="%TOTAL_RUN_TIME%">N/A</a><b>hr:m</b></h4>
+                    <hr class="solid">
+                    <h4><p>Total Run Time</p></h4>
+                </div>
+            </div>
+        </div>
+
+    <!-- 
+    Other things to add: 
+        Graph for average speed
+        Sync with actual data and modes (don't restart each time, remember previous?)
+        Add dark mode
+    -->
+        <script src="script.js"></script>
+    </body>
+    </html>
