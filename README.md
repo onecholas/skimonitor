@@ -1,6 +1,6 @@
 # SkiMonitor
 
-A tracking system for skiers looking to monitor (and spice up) their trips to the slopes! I've been working on this project since the middle of Summer 2023, when I wanted a way to track my ski trips and make skiing in the Midwest a bit more fun :).
+A tracking system for skiers looking to monitor (and spice up) their trips to the slopes! I've been working on this project since the middle of Summer 2023, when I wanted a way to track my ski trips and make skiing in the Midwest a bit more fun :). With this project, I can control the LEDs mounted on my skis through an access point web server hosted on the ESP32, as well as view run statistics and track my skiing overall.
 
 Please let me know if there's any functionality that would be fun to add!
 
